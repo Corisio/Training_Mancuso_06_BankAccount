@@ -71,7 +71,7 @@
     <Compile Include="TransactionRepository.cs" />
     <Compile Include="AccountServiceShould.cs" />
     <Compile Include="AccountService.cs" />
-    <Compile Include="AccountServiceShouldAsAcceptanceTest.cs" />
+    <Compile Include="PrintStatementShould.cs" />
     <Compile Include="ITransactionRepository.cs" />
     <Compile Include="IAccountService.cs" />
     <Compile Include="InvalidRepositoryException.cs" />
