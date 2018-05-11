@@ -37,9 +37,9 @@ namespace SandroMancusoTraining_Project6
 
             var expectedOutput = new StringBuilder();
             expectedOutput.AppendLine("DATE | AMOUNT | BALANCE");
-            expectedOutput.AppendLine("10 / 04 / 2014 | 500.00 | 1400.00");
-            expectedOutput.AppendLine("02 / 04 / 2014 | -100.00 | 900.00");
-            expectedOutput.AppendLine("01 / 04 / 2014 | 1000.00 | 1000.00");
+            expectedOutput.AppendLine("10/04/2014 | 500.00 | 1400.00");
+            expectedOutput.AppendLine("02/04/2014 | -100.00 | 900.00");
+            expectedOutput.AppendLine("01/04/2014 | 1000.00 | 1000.00");
 
             Assert.AreEqual(expectedOutput, actualOutput);
         }
