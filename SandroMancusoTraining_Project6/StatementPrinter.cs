@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace SandroMancusoTraining_Project6
@@ -11,19 +12,22 @@ namespace SandroMancusoTraining_Project6
 
         public void PrintStatement(IList<Transaction> transactions)
         {
-            var formattedOutput = new StringBuilder();
+            var formattedOutput = new List<string>();
             var balance = 0;
 
-            formattedOutput.AppendLine(Header);
+            Console.WriteLine(Header);
 
-            foreach (var transaction in transactions)
+            foreach (var transaction in transactions.OrderBy(t => t.Date))
             {
                 balance += transaction.Amount;
-                formattedOutput.AppendLine(
+                formattedOutput.Add(
                     $"{transaction.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)} | {transaction.Amount.ToString("###0.00", CultureInfo.InvariantCulture)} | {balance.ToString("###0.00", CultureInfo.InvariantCulture)}");
             }
 
-            Console.Write(formattedOutput.ToString());
+            for (var index = formattedOutput.Count - 1; index >= 0; index--)
+            {
+                Console.WriteLine(formattedOutput[index]);
+            }
         }
     }
 }
