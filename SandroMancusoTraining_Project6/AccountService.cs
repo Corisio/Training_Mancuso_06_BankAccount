@@ -8,19 +8,21 @@ namespace SandroMancusoTraining_Project6
 {
     public class AccountService : IAccountService
     {
-        private readonly IAccountRepository _repository;
+        private readonly ITransactionRepository _repository;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public AccountService(IAccountRepository repository)
+        public AccountService(ITransactionRepository repository, IDateTimeProvider dateTimeProvider)
         {
             if (repository == null)
                 throw new InvalidRepositoryException("Account");
 
             _repository = repository;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public void Deposit(int amount)
         {
-            throw new System.NotImplementedException();
+            _repository.AddTransaction(new Transaction(amount, _dateTimeProvider.GetCurrentTime()));
         }
 
         public void Withdraw(int amount)
