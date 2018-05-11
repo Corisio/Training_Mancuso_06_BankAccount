@@ -23,14 +23,15 @@ namespace SandroMancusoTraining_Project6
                 .Returns(new DateTime(2014, 4, 10));
 
             ITransactionRepository repository = new TransactionRepository();
+            IStatementFormatter statementFormatter = new StatementFormatter();
 
-            var accountService = new AccountService(repository, dateTimeProvider.Object);
+            var accountService = new AccountService(repository, dateTimeProvider.Object, statementFormatter);
 
             accountService.Deposit(1000);
             accountService.Withdraw(100);
             accountService.Deposit(500);
 
-            accountService.PrinStatement();
+            accountService.PrintStatement();
             
             String actualOutput = fakeoutput.ToString();
 
@@ -43,4 +44,4 @@ namespace SandroMancusoTraining_Project6
             Assert.AreEqual(expectedOutput, actualOutput);
         }
     }
- }
+}

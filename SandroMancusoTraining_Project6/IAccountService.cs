@@ -4,6 +4,6 @@
     {
         void Deposit(int amount);
         void Withdraw(int amount);
-        void PrinStatement();
+        void PrintStatement();
     }
 }

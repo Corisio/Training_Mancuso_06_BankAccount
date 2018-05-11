@@ -4,8 +4,12 @@
     {
         private readonly ITransactionRepository _repository;
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IStatementFormatter _statementFormatter;
 
-        public AccountService(ITransactionRepository repository, IDateTimeProvider dateTimeProvider)
+        public AccountService(
+            ITransactionRepository repository, 
+            IDateTimeProvider dateTimeProvider,
+            IStatementFormatter statementFormatter)
         {
             if (repository == null)
                 throw new InvalidRepositoryException("Account");
@@ -15,6 +19,7 @@
 
             _repository = repository;
             _dateTimeProvider = dateTimeProvider;
+            _statementFormatter = statementFormatter;
         }
 
         public void Deposit(int amount)
@@ -27,9 +32,11 @@
             _repository.Add(new Transaction(-amount, _dateTimeProvider.GetCurrentTime()));
         }
 
-        public void PrinStatement()
+        public void PrintStatement()
         {
-            throw new System.NotImplementedException();
+            var transactions = _repository.GetAll();
+
+            _statementFormatter.GenerateStatement(transactions);
         }
     }
 }

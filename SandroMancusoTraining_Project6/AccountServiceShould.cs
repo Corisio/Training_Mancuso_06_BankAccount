@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 
@@ -7,6 +8,20 @@ namespace SandroMancusoTraining_Project6
     [TestFixture]
     public class AccountServiceShould
     {
+        private Mock<ITransactionRepository> _transactionRepository;
+        private Mock<IDateTimeProvider> _dateTimeProvider;
+        private Mock<IStatementFormatter> _statementFormatter;
+        private AccountService _accountService;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _transactionRepository = new Mock<ITransactionRepository>();
+            _dateTimeProvider = new Mock<IDateTimeProvider>();
+            _statementFormatter = new Mock<IStatementFormatter>();
+            _accountService = new AccountService(_transactionRepository.Object, _dateTimeProvider.Object, _statementFormatter.Object);
+        }
+
         [Test]
         public void throw_invalid_repository_exception_when_initialized_with_null_account_repository()
         {
@@ -15,7 +30,7 @@ namespace SandroMancusoTraining_Project6
             ITransactionRepository repository = null;
             try
             {
-                new AccountService(repository, dateTimeProvider.Object);
+                new AccountService(repository, dateTimeProvider.Object, _statementFormatter.Object);
             }
             catch (InvalidRepositoryException e)
             {
@@ -33,7 +48,7 @@ namespace SandroMancusoTraining_Project6
             Mock<ITransactionRepository> repository = new Mock<ITransactionRepository>();
             try
             {
-                new AccountService(repository.Object, dateTimeProvider);
+                new AccountService(repository.Object, dateTimeProvider, _statementFormatter.Object);
             }
             catch (InvalidProviderException e)
             {
@@ -47,15 +62,12 @@ namespace SandroMancusoTraining_Project6
         [Test]
         public void deposit_should_store_transaction_in_repository()
         {
-            var accountRepository = new Mock<ITransactionRepository>();
-            var dateTimeProvider = new Mock<IDateTimeProvider>();
-            var accountService = new AccountService(accountRepository.Object, dateTimeProvider.Object);
             var currentTime = new DateTime(2000, 1, 1);
-            dateTimeProvider.Setup(dtp => dtp.GetCurrentTime()).Returns(currentTime);
+            _dateTimeProvider.Setup(dtp => dtp.GetCurrentTime()).Returns(currentTime);
 
-            accountService.Deposit(100);
+            _accountService.Deposit(100);
 
-            accountRepository.Verify(ar =>
+            _transactionRepository.Verify(ar =>
                 ar.Add(It.Is<Transaction>(ao =>
                     ao.Amount == 100 && ao.Date == currentTime)));
         }
@@ -63,22 +75,33 @@ namespace SandroMancusoTraining_Project6
         [Test]
         public void withdraw_should_store_transaction_in_repository()
         {
-            var accountRepository = new Mock<ITransactionRepository>();
-            var dateTimeProvider = new Mock<IDateTimeProvider>();
-            var accountService = new AccountService(accountRepository.Object, dateTimeProvider.Object);
             var currentTime = new DateTime(2000, 1, 1);
-            dateTimeProvider.Setup(dtp => dtp.GetCurrentTime()).Returns(currentTime);
+            _dateTimeProvider.Setup(dtp => dtp.GetCurrentTime()).Returns(currentTime);
 
-            accountService.Withdraw(100);
+            _accountService.Withdraw(100);
 
-            accountRepository.Verify(ar =>
+            _transactionRepository.Verify(ar =>
                 ar.Add(It.Is<Transaction>(ao =>
                     ao.Amount == -100 && ao.Date == currentTime)));
         }
-    }
 
-    public interface IDateTimeProvider
-    {
-        DateTime GetCurrentTime();
+        [Test]
+        public void get_all_transactions_when_printing_statement()
+        {
+            _accountService.PrintStatement();
+
+            _transactionRepository.Verify(ar => ar.GetAll(), Times.Once);
+        }
+
+        [Test]
+        public void send_all_transactions_to_the_statement_formatter_when_printing_statement()
+        {
+            var transactions = new List<Transaction>();
+            _transactionRepository.Setup(tr => tr.GetAll()).Returns(transactions);
+
+            _accountService.PrintStatement();
+
+            _statementFormatter.Verify(sf => sf.GenerateStatement(transactions), Times.Once);
+        }
     }
 }
