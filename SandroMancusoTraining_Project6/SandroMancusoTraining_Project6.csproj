@@ -64,9 +64,9 @@
   <ItemGroup>
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="InvalidProviderException.cs" />
-    <Compile Include="IStatementFormatter.cs" />
-    <Compile Include="StatementFormatter.cs" />
-    <Compile Include="StatementFormatterShould.cs" />
+    <Compile Include="IStatementPrinter.cs" />
+    <Compile Include="StatementPrinter.cs" />
+    <Compile Include="StatementPrinterShould.cs" />
     <Compile Include="Transaction.cs" />
     <Compile Include="TransactionRepository.cs" />
     <Compile Include="AccountServiceShould.cs" />

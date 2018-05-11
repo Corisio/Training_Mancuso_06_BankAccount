@@ -5,25 +5,25 @@ using System.Text;
 
 namespace SandroMancusoTraining_Project6
 {
-    public class StatementFormatter : IStatementFormatter
+    public class StatementPrinter : IStatementPrinter
     {
-        private const string HEADER = "DATE | AMOUNT | BALANCE";
+        private const string Header = "DATE | AMOUNT | BALANCE";
 
-        public IEnumerable<string> GenerateStatement(IList<Transaction> transactions)
+        public void PrintStatement(IList<Transaction> transactions)
         {
-            var formattedOutput = new List<string>();
+            var formattedOutput = new StringBuilder();
             var balance = 0;
 
-            formattedOutput.Add(HEADER);
+            formattedOutput.AppendLine(Header);
 
             foreach (var transaction in transactions)
             {
                 balance += transaction.Amount;
-                formattedOutput.Add(
+                formattedOutput.AppendLine(
                     $"{transaction.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)} | {transaction.Amount.ToString("###0.00", CultureInfo.InvariantCulture)} | {balance.ToString("###0.00", CultureInfo.InvariantCulture)}");
             }
 
-            return formattedOutput;
+            Console.Write(formattedOutput.ToString());
         }
     }
 }

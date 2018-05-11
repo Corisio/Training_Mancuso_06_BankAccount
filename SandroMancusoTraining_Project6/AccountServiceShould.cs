@@ -10,7 +10,7 @@ namespace SandroMancusoTraining_Project6
     {
         private Mock<ITransactionRepository> _transactionRepository;
         private Mock<IDateTimeProvider> _dateTimeProvider;
-        private Mock<IStatementFormatter> _statementFormatter;
+        private Mock<IStatementPrinter> _statementPrinter;
         private AccountService _accountService;
 
         [SetUp]
@@ -18,8 +18,8 @@ namespace SandroMancusoTraining_Project6
         {
             _transactionRepository = new Mock<ITransactionRepository>();
             _dateTimeProvider = new Mock<IDateTimeProvider>();
-            _statementFormatter = new Mock<IStatementFormatter>();
-            _accountService = new AccountService(_transactionRepository.Object, _dateTimeProvider.Object, _statementFormatter.Object);
+            _statementPrinter = new Mock<IStatementPrinter>();
+            _accountService = new AccountService(_transactionRepository.Object, _dateTimeProvider.Object, _statementPrinter.Object);
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace SandroMancusoTraining_Project6
             ITransactionRepository repository = null;
             try
             {
-                new AccountService(repository, dateTimeProvider.Object, _statementFormatter.Object);
+                new AccountService(repository, dateTimeProvider.Object, _statementPrinter.Object);
             }
             catch (InvalidRepositoryException e)
             {
@@ -48,7 +48,7 @@ namespace SandroMancusoTraining_Project6
             Mock<ITransactionRepository> repository = new Mock<ITransactionRepository>();
             try
             {
-                new AccountService(repository.Object, dateTimeProvider, _statementFormatter.Object);
+                new AccountService(repository.Object, dateTimeProvider, _statementPrinter.Object);
             }
             catch (InvalidProviderException e)
             {
@@ -101,7 +101,7 @@ namespace SandroMancusoTraining_Project6
 
             _accountService.PrintStatement();
 
-            _statementFormatter.Verify(sf => sf.GenerateStatement(transactions), Times.Once);
+            _statementPrinter.Verify(sf => sf.PrintStatement(transactions), Times.Once);
         }
     }
 }

@@ -23,9 +23,9 @@ namespace SandroMancusoTraining_Project6
                 .Returns(new DateTime(2014, 4, 10));
 
             ITransactionRepository repository = new TransactionRepository();
-            IStatementFormatter statementFormatter = new StatementFormatter();
+            IStatementPrinter statementPrinter = new StatementPrinter();
 
-            var accountService = new AccountService(repository, dateTimeProvider.Object, statementFormatter);
+            var accountService = new AccountService(repository, dateTimeProvider.Object, statementPrinter);
 
             accountService.Deposit(1000);
             accountService.Withdraw(100);
