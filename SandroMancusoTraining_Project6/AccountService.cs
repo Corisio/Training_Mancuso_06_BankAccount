@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SandroMancusoTraining_Project6
+﻿namespace SandroMancusoTraining_Project6
 {
     public class AccountService : IAccountService
     {
@@ -16,18 +10,21 @@ namespace SandroMancusoTraining_Project6
             if (repository == null)
                 throw new InvalidRepositoryException("Account");
 
+            if (dateTimeProvider == null)
+                throw new InvalidProviderException("DateTime");
+
             _repository = repository;
             _dateTimeProvider = dateTimeProvider;
         }
 
         public void Deposit(int amount)
         {
-            _repository.AddTransaction(new Transaction(amount, _dateTimeProvider.GetCurrentTime()));
+            _repository.Add(new Transaction(amount, _dateTimeProvider.GetCurrentTime()));
         }
 
         public void Withdraw(int amount)
         {
-            throw new System.NotImplementedException();
+            _repository.Add(new Transaction(-amount, _dateTimeProvider.GetCurrentTime()));
         }
 
         public void PrinStatement()

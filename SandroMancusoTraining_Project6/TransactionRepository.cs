@@ -1,10 +1,25 @@
-﻿namespace SandroMancusoTraining_Project6
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace SandroMancusoTraining_Project6
 {
     internal class TransactionRepository : ITransactionRepository
     {
-        public void AddTransaction(Transaction transaction)
+        private readonly List<Transaction> _transactions;
+
+        public TransactionRepository()
         {
-            throw new System.NotImplementedException();
+            _transactions = new List<Transaction>();
+        }
+
+        public void Add(Transaction transaction)
+        {
+            _transactions.Add(transaction);
+        }
+
+        public IList<Transaction> GetAll()
+        {
+            return _transactions.ToList();
         }
     }
 }

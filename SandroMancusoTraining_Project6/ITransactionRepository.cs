@@ -1,7 +1,11 @@
-﻿namespace SandroMancusoTraining_Project6
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace SandroMancusoTraining_Project6
 {
     public interface ITransactionRepository
     {
-        void AddTransaction(Transaction transaction);
+        void Add(Transaction transaction);
+        IList<Transaction> GetAll();
     }
 }
